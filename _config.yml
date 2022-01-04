@@ -69,11 +69,11 @@ instagram: alicemkeller
 
 # Select which social network share links to show in posts
 share-links-active:
+  github: true
   twitter: false
   instagram: false
   linkedin: false
-  github: true
-
+  
 # How to display the link to your website in the footer
 # Remove this if you don't want a link in the footer
 #url-pretty: "MyWebsite.com"
