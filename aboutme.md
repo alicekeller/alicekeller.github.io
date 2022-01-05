@@ -1,16 +1,10 @@
 ---
 layout: page
-title: About me
-subtitle: Why you'd want to go on a date with me
+title: About
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+Hello! I'm Ali, an Ecologist by training and a Data Scientist by aspiration. I live in Colorado Springs, CO.
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+My background is in Forest Ecology and Biostatistics, which I earned my master's degree in at the [University of New Mexico](https://biology.unm.edu/) in 2017. My first course in R was inspirational, and motivated me to continue learning the program after I graduated. Most of my hobby projects are with ecological data, such as anticipating the spring bud break date of Colorado native plants. I have a few interesting new projects in the works though, so stay tuned! 
 
-What else do you need?
-
-### My story
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](https://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+When I'm not working as a Lab and Greenhouse Manager at Colorado College or fiddling away in R, I love to trail run with my two Siberian Huskies. I also enjoy reading, rewatching the Office for the 100th time, and spending time with my 8 month old.
