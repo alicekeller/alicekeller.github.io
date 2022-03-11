@@ -3,6 +3,9 @@ title: "Colorado Phenology"
 subtitle: Investigating when leaf buds appear within plants across Colorado
 ---
 
+I began this project a little over two years ago in hopes that it would be a quick, fun data investigation. Fast forward to now, (mostly) post-pandemic and one child later, and I'm finally pulling it out from the back burner and putting the finishing touches on it. It is by no means as polished or thorough as I would like it to be, but sometimes done is better than perfect. I've learned a lot about processing and analalyzing data in R since I began, so my code is an odd mix of current and not-so-current techniques. Hopefully there is a very small group of people that finds this interesting - on to more investigating!
+
+
 ## Questions
 
 For this project, I had three main questions I was interested in answering.
@@ -15,7 +18,7 @@ Follow my process below to see the answers!
 
 ***
 
-Begin by loading data and inspecting.
+Begin by loading data and inspecting, followed by loading the packages I needed to use.
 
 
 ```{r}
@@ -25,8 +28,7 @@ head(phen)
 ```
 
 
-
-```{r, include = FALSE}
+```{r}
 library(tidyverse)
 library(ggcorrplot)
 library(lubridate)
@@ -36,20 +38,13 @@ library(gridExtra)
 library(ggridges)
 ```
 
-After inspecting, I removed columns with information that's not relevant to my questions and would just make analysis more clunky.
+After inspecting, I removed columns with information that's not relevant to my questions and would just make analysis more clunky. After doing this, I changed the structure of some of the columns that weren't in the correct format.
 
 ```{r}
 phen2 <- select(phen, -c(1, 3, 4, 5, 7, 11, 12, 14, 15, 16, 18, 20, 23, 24, 25, 26, 27, 28, 29, 30,
                          31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
                          46, 47, 48, 49, 50, 51, 65, 67))
-```
 
-Once I had only the columns present that I wanted to analyze, I checked the structure of each and changed those that weren't in correct format.
-
-```{r, include = FALSE}
-str(phen2)
-```
-```{r}
 phen2$Phenophase_ID <- as.factor(phen2$Phenophase_ID)
 phen2$Site_ID <- as.factor(phen2$Site_ID)
 phen2$Species_ID <- as.factor(phen2$Species_ID)
@@ -63,7 +58,6 @@ phen2$Mean_First_Yes_Year <- as.factor(phen2$Mean_First_Yes_Year)
 str(phen2)
 ```
 
-
 Now that things are in their correct formats, there are some columns that need to be manipulated. For instance, we have the minimum and maximum temperatures for each season - a more informative metric may be mean temperature for each season. I mutated the data to find the mean for each. 
 
 ```{r}
@@ -75,14 +69,15 @@ phen2 <- phen2 %>%
          )
 ```
 
-Another column to create comes from changing `Mean_Daylength` to `daylength_sec`, and then dividing by 60 to get our new column, `daylength_min`.
+Another column to create comes from changing `Mean_Daylength`, which is in seconds, to `daylength_sec`, and then dividing by 60 to get our new column, `daylength_min`.
 
 ```{r}
 phen2 <- rename(phen2, daylength_sec = Mean_Daylength)
 phen2 <- mutate(phen2, daylength_min = daylength_sec/60)
 ```
 
-Time to check for missing values, and in this case, remove them. The values were reading as `-9999` so to start I changed them to read as `NA` and then used the `na.omit` function.
+Time to check for missing values, and in this case, remove them. Sometimes missing values are useful and the fact that a value is missing denotes something else about the data. In this case, a missing value could mean that there is an observation present in the row, but not about contained in the variables I'm working with. Thus, I removed the missing data. The values were reading as `-9999` so to start I changed them to read as `NA` and then used the `na.omit` function.
+
 ```{r, warning = FALSE}
 phen2[phen2 < -1000] <- NA
 colSums(is.na(phen2))
@@ -92,8 +87,8 @@ nrow(phen2)
 summary(phen2)
 ```
 
-
 Renaming a few columns to be less cumbersome.
+
 ```{r}
 phen2 <- phen2 %>%
   rename(Year = Mean_First_Yes_Year,
