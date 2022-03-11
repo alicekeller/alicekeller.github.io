@@ -1,8 +1,6 @@
 ---
-title: "Phenology"
-author: "Ali Keller"
-date: "6/2/2020"
-output: html_document
+title: "Colorado Phenology"
+subtitle: Investigating when leaf buds appear within plants across Colorado
 ---
 
 ## Questions
