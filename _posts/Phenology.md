@@ -38,7 +38,7 @@ library(gridExtra)
 library(ggridges)
 ```
 
-After inspecting, I removed columns with information that's not relevant and would just make analysis more clunky.
+After inspecting, I removed columns with information that's not relevant to my questions and would just make analysis more clunky.
 
 ```{r}
 phen2 <- select(phen, -c(1, 3, 4, 5, 7, 11, 12, 14, 15, 16, 18, 20, 23, 24, 25, 26, 27, 28, 29, 30,
