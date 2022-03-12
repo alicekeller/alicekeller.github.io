@@ -160,6 +160,13 @@ p4 <- ggplot(leaf_bud, aes(Year, DOY)) +
   my.theme
 p4
 
+p5 <- ggplot(leaf_bud, aes(DOY, Phenophase_ID)) +
+  geom_jitter(aes(color = Year), alpha = 0.5) +
+  labs(title = "Day of leaf bud break over time by year", x = "Day of year", 
+       y = "Phenophase ID") +
+  theme_classic() +
+  my.theme
+p5
 
 p6 <- ggplot(leaf_bud, aes(Elevation_in_Meters, DOY)) +
       geom_jitter(alpha = 0.5) +
