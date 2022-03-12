@@ -197,7 +197,31 @@ p7
 This plot conveys the sample size and mean bud break date, but it's not overtly obvious to see the change over time at a glance. I decided to create another plot using the same data but using the `ggridges` package.
 
 ```{r}
-#insert big ggplot here
+leaf_bud %>%
+  ggplot(aes(x= DOY, y = Year, group = Year)) +
+  geom_vline(xintercept = 79, size = 1, color = "tan4") +
+  geom_text(x = 35, y = 11.7, label="First day \nof Spring", color = "tan4", family = "permanent", size = 6) +
+  geom_segment(aes(x = 52, y = 11.5, xend = 76, yend = 11.3),
+               arrow = arrow(length = unit(0.4, "cm")),
+               color = "tan4") +
+  geom_density_ridges(scale = 1.5, alpha = 0.7, fill = "olivedrab3", color = "black") +
+  scale_y_discrete(limits = rev(levels(leaf_bud$Year))) +
+  xlab("Day of Year") +
+  labs(title = "When do leaves appear?",
+       subtitle = "Mean day of leaf bud break over 10 years in Colorado",
+       caption = "Plot: @alicemkeller | Data: USA National Phenology Network") +
+  theme(axis.line = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_rect(fill = "cornsilk"),
+        plot.background = element_rect(fill = "cornsilk"),
+        text = element_text(family = "mulish"),
+        axis.title = element_text(color = "black", size = 28),
+        axis.text = element_text(color = "black", size = 16),
+        plot.title = element_text(hjust = 0.4, vjust = 1, size = 46, family = "noto", face = "bold", color = "black"),
+        plot.subtitle = element_text(hjust = 0.4, vjust = 1.5, size = 24, family = "noto", color = "black"),
+        plot.caption = element_text(size = 12),
+        axis.ticks.y = element_blank())
 ```
 
 The two main takeaways that this plot communicates to me is the gradual decrease of mean bud break date (date is getting earlier over time) and the emergence of a slight bi-modal distribution in some of the earlier years.
