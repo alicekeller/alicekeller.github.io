@@ -78,7 +78,7 @@ phen2 <- mutate(phen2, daylength_min = daylength_sec/60)
 
 Time to check for missing values, and in this case, remove them. Sometimes missing values are useful and the fact that a value is missing denotes something else about the data. In this case, a missing value could mean that there is an observation present in the row, but not about contained in the variables I'm working with. Thus, I removed the missing data. The values were reading as `-9999` so to start I changed them to read as `NA` and then used the `na.omit` function.
 
-```{r, warning = FALSE}
+```{r}
 phen2[phen2 < -1000] <- NA
 colSums(is.na(phen2))
 
@@ -284,7 +284,7 @@ grid.arrange(p9, p10, p11, p12, nrow = 2)
 
 Mean accumulated precipitation and spring temperatures seems to have highest correlations. Here are values shown below.
 
-```{r, include = FALSE}
+```{r}
 a <- leaf_bud$daylength_min
 b <- leaf_bud$DOY
 c <- leaf_bud$Mean_Accum_Prcp
