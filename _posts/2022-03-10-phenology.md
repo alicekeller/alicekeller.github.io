@@ -12,9 +12,11 @@ For this project, I had three main questions I was interested in answering.
 
 1. Has the mean date of breaking leaf buds changed over the course of 10 years in Colorado?
 2. What effect, if any, does elevation have on date of first bud break? Has the date at certain elevations become later?
-3. How does bud break vary by species at the same elevation?
+3. What is the most prominent factor in determining bud break date?
 
-Follow my process below to see the answers!
+Data was acquired from the USA National Phenology Network.
+
+Follow my process below as I tidy data, explore through visualizations, and determine which factors have the largest effect on bud break date.
 
 ***
 
@@ -139,6 +141,8 @@ p3 <- ggplot(phen2, aes(Year)) +
   my.theme
 p3
 ```
+![p2]({{site.url}}/assets/img/p2_phen.png)
+![p3]({{site.url}}/assets/img/p3_phen.png)
 
 More exploration plots - dates of different phases over an elevation gradient and counts of specimens for each year.
 
@@ -177,9 +181,11 @@ p6 <- ggplot(leaf_bud, aes(Elevation_in_Meters, DOY)) +
   theme_classic() + 
   my.theme
 p6
-
-#grid.arrange(p4, p5, p5a, p6, nrow = 2)
 ```
+![p4]({{site.url}}/assets/img/p4_phen.png)
+![p5]({{site.url}}/assets/img/p5_phen.png)
+![p6]({{site.url}}/assets/img/p6_phen.png)
+
 
 These plots are most summaries and visualizations of our leaf bud data. The first two show date of initial bud over 10 years. This date appears to be getting later as time goes on, but the next plot will quantify this. The last plot shows date of first leaf bud break as a function of elevation, and as the regression line shows, the date gets later as elevation increases.
 
@@ -194,6 +200,7 @@ p7 <- ggplot(leaf_bud, aes(Year, DOY)) +
   my.theme
 p7
 ```
+![p7]({{site.url}}/assets/img/p7_phen.png)
 
 This plot conveys the sample size and mean bud break date, but it's not overtly obvious to see the change over time at a glance. I decided to create another plot using the same data but using the `ggridges` package.
 
