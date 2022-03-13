@@ -118,7 +118,7 @@ p1 <- ggplot(phen2, aes(DOY, daylength_min)) +
 p1
 
 ```
-![alicekeller.github.io](./assets/img/p1_phen.png)
+"/assets/img/p1_phen.png"
 
 This plot shows the daylength for each day throughout the year where a phenologic event took place and was recorded. The data follows a normal distribution in this way. Mainly, this plot tells us that phenologic events (bud break date being one of them) are almost fully dependent upon daylength. 
 
