@@ -205,7 +205,7 @@ p7
 This plot conveys the sample size and mean bud break date, but it's not overtly obvious to see the change over time at a glance. I decided to create another plot using the same data but using the `ggridges` package.
 
 ```{r}
-leaf_bud %>%
+p7s <- leaf_bud %>%
   ggplot(aes(x= DOY, y = Year, group = Year)) +
   geom_vline(xintercept = 79, size = 1, color = "tan4") +
   geom_text(x = 35, y = 11.7, label="First day \nof Spring", color = "tan4", family = "permanent", size = 6) +
@@ -230,9 +230,10 @@ leaf_bud %>%
         plot.subtitle = element_text(hjust = 0.4, vjust = 1.5, size = 24, family = "noto", color = "black"),
         plot.caption = element_text(size = 12),
         axis.ticks.y = element_blank())
+p7s
 ```
 
-The two main takeaways that this plot communicates to me is the gradual decrease of mean bud break date (date is getting earlier over time) and the emergence of a slight bi-modal distribution in some of the earlier years.
+The two main takeaways that this plot communicates is the gradual decrease of mean bud break date (date getting earlier over time) and the emergence of a slight bi-modal distribution in some of the earlier years. Both of these are likely related to the temperature warming earlier in the year, leading the plant to believe spring is here when it may still be a month or two off.
 
 
 While the distributions are shown visually in the plot above, I wanted to get one discrete mean bud break date for each year into a data frame for easier analysis.
@@ -242,7 +243,6 @@ mean_by_year <- aggregate(leaf_bud$DOY, list(leaf_bud$Year), mean)
 names(mean_by_year) <- c("Year", "Mean_DOY")
 mean_by_year
 ```
-
 These means follow closely those in the plot above, but not completely. 
 
 Next I wanted to see the mean date of bud break, broken down by species. I ordered them by genus to see the differences in bud break dates of species from the same genus.
@@ -255,7 +255,8 @@ by_species <- mean_by_species[order(mean_by_species$Genus),]
 head(by_species)
 ```
 
-As we can see, even within the Acer genus, there is a lot of variation of mean date of bud break. Plot shown below depicts mean date of bud break for each genus.
+As we can see, even within the Acer genus, there is a lot of variation of mean date of bud break. This is depicted in the plot shown below, which visualizes the mean date of bud break for each genus.
+
 
 ```{r}
 p7a <- ggplot(by_species, aes(Genus, Mean_DOY)) +
@@ -267,7 +268,7 @@ p7a <- ggplot(by_species, aes(Genus, Mean_DOY)) +
 p7a
 ```
 
-Added a regression line to the year/date of first bud break plot. While mean first date of bud break appears to decrease year by year, the `R^2` value is  low. The linear model does not predict the date of first bud break with much accuracy. Let's see what other abiotic factors may be highly correlated with date of first bud break. 
+In the next plot, I added a regression line to the year/date of first bud break plot. While the mean first date of bud break appears to decrease year by year, the `R-squared` value is  low. The linear model does not predict the date of first bud break with much accuracy. Let's see what other abiotic factors may be highly correlated with date of first bud break. 
 
 ```{r}
 p8b <- ggplot(leaf_bud, aes(Year, DOY)) + 
@@ -309,20 +310,18 @@ p11
 
 p12 <- ggplot(leaf_bud, aes(Tavg_Spring, DOY)) +
   geom_point() +
-  labs(x = "Average Spring Temperature (C)") +
+  labs(x = "Mean Spring Temperature (C)") +
   theme_classic() +
   my.theme +
   theme(axis.title.y = element_blank())
 p12
 
-#axis.text.y = element_blank()
-
-# add color? makes grid seem more cumbersome
 grid.arrange(p9, p10, p11, p12, nrow = 2)
 ```
 
-Mean accumulated precipitation and spring temperatures seems to have highest correlations. Here are values shown below.
+As an aside, I did some preliminary experimenting with the `ggplotly` package - what fun! Hover above any point in the plot above to gain more insights. More to come on that in another project. 
 
+Mean accumulated precipitation and spring temperatures seems to have highest correlations. Here are values shown below.
 ```{r}
 a <- leaf_bud$daylength_min
 b <- leaf_bud$DOY
@@ -335,15 +334,16 @@ cor(c, b)
 
 Variable            | Correlation with DOY
 :-----------------  | :-------------------:
-Daylength           | `r cor(a, b)`
-Accumulated Precip. | `r cor(c, b)`
-Spring Precip.      | `r cor(d, b)`
-Avg. Spring Temp.   | `r cor(e, b)`
+Daylength           | `0.9913`
+Accumulated Precip. | `0.7636`
+Spring Precip.      | `0.0914`
+Avg. Spring Temp.   | `-0.2842`
 
 
-Daylength has the highest correlation, so as mentioned above, it is the best predictor of date of bud break. After that, mean accumulated precipitation seems to be the best predictor. Interestingly, the more precipitation that occurs, the later the date of first bud break. Spring precipitation alone does not seem to be significantly correlated with date of first bud break. The next best predictor is average Spring temperature - as the temperature increases, date of first bud break gets earlier.
+Daylength has the highest correlation, so as mentioned above, it is the best predictor of date of bud break. After that, mean accumulated (annual) precipitation seems to be the best predictor. Interestingly, the more precipitation that occurs, the later the date of first bud break. The next best predictor is average Spring temperature - as the temperature increases, date of first bud break gets earlier. Spring precipitation alone does not seem to be significantly correlated with date of first bud break.
 
-fit linear models to daylength, meanaccumprecip, and avg spring temp
+Here I fit linear models to daylength, mean accumulated precipitation, and mean spring temperature to see how the data fit the model.
+
 ```{r}
 lm.doy.length <- lm(DOY ~ daylength_min, data = leaf_bud)
 summary(lm.doy.length)
@@ -355,18 +355,11 @@ lm.doy.temp <- lm(DOY ~ Tavg_Spring, data = leaf_bud)
 summary(lm.doy.temp)
 ```
 
-The model with the best fit is the one we could have guessed, daylength. Obviously this factor has the most influence on when leaves break their buds. Beyond that, mean accumulated precipitation has the next largest influence (`R^2 = 0.58`). The factor with the next highest correlation, `Tavg_Spring`, did not have a good model fit so does not seem to be a reliable predictor of date of first bud break.
+The model with the best fit is the one we could have guessed, daylength. This model gives an R-squared value of 0.9826. Obviously this factor has the most influence on when leaves break their buds. Beyond that, mean accumulated precipitation has the next largest influence (`R-squared = 0.58`). The factor with the next highest correlation, `Tavg_Spring`, did not have a good model fit (`R-squared = 0.078`) so does not seem to be a reliable predictor of date of first bud break.
 
-## Yearly Datasets
+***
 
-Next I decided to break the data into new dataframes by year, to be able to compare how mean precipitation is changing over time, and maybe help us draw some conclusions as to why bud break date seems to be getting earlier.
+## Takeaways
+It seems that the spring bud break date for plants in Colorado is getting earlier over the course of the past 10 years. While this dataset is not very large, nor is the time frame very long, this is an intriguing speculation. Additionally, the largest predictor of when leaves break their buds is daylight length. This was proved multiple times by the data above. After that, we can look to mean annual accumulated precipiation as an indicator - the more moisture plants get, the earlier they break their buds.
 
-```{r}
-year_break <- function(x) {
-  filter(leaf_bud, Year == x)
-}
-
-year_break(leaf_bud)
-```
-
-try to write function with for loop that assigns each year to new dataframe - gets too cumbersome if have to rewrite code over and over for 10 years of data
+What will a gradual earlier bud break date mean for the birds, insects, and other animals that rely on these plants?
