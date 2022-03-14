@@ -3,7 +3,7 @@ title: "Colorado Phenology"
 subtitle: Investigating when leaf buds appear within plants across Colorado
 ---
 
-I began this project a little over two years ago in hopes that it would be a quick, fun data investigation. Fast forward to now, (mostly) post-pandemic and one child later, and I'm finally pulling it out from the back burner and putting the finishing touches on it. It is by no means as polished or thorough as I would like it to be, but sometimes done is better than perfect. I've learned a lot about processing and analalyzing data in R since I began, so my code is an odd mix of current and not-so-current techniques. Hopefully there is a very small group of people that finds this interesting - on to more investigating!
+I began this project a while ago in hopes that it would be a quick, fun data investigation. Of course life got in the way, and now I'm finally pulling it out from the back burner and putting the finishing touches on it. It is by no means as polished or thorough as I would like it to be, but sometimes done is better than perfect. I've learned a lot about processing and analalyzing data in R since I began, so my code is an odd mix of current and not-so-current techniques. Hopefully there is a very small group of people that finds this interesting - on to more investigating!
 
 
 ## Questions
@@ -16,7 +16,7 @@ For this project, I had three main questions I was interested in answering.
 
 Data was acquired from the USA National Phenology Network.
 
-Follow my process below as I tidy data, explore through visualizations, and determine which factors have the largest effect on bud break date.
+Follow my process below as I tidy data, explore through visualizations, and use linear regression to determine which factors have the largest effect on bud break date.
 
 ***
 
@@ -29,7 +29,6 @@ phen <- read.csv(urlfile)
 head(phen)
 ```
 
-
 ```{r}
 library(tidyverse)
 library(ggcorrplot)
@@ -40,7 +39,7 @@ library(gridExtra)
 library(ggridges)
 ```
 
-After inspecting, I removed columns with information that's not relevant to my questions and would just make analysis more clunky. After doing this, I changed the structure of some of the columns that weren't in the correct format.
+After inspecting, I (painstakingly - there has to be a better way!) removed columns with information that wasn't relevant to my questions and would just make analysis more clunky. After doing this, I changed the structure of some of the columns that weren't in the correct format for analysis.
 
 ```{r}
 phen2 <- select(phen, -c(1, 3, 4, 5, 7, 11, 12, 14, 15, 16, 18, 20, 23, 24, 25, 26, 27, 28, 29, 30,
@@ -60,7 +59,7 @@ phen2$Mean_First_Yes_Year <- as.factor(phen2$Mean_First_Yes_Year)
 str(phen2)
 ```
 
-Now that things are in their correct formats, there are some columns that need to be manipulated. For instance, we have the minimum and maximum temperatures for each season - a more informative metric may be mean temperature for each season. I mutated the data to find the mean for each. 
+Now that things are in their correct formats, I did some manipulation. For instance, the data include minimum and maximum temperatures for each season - a more informative metric for me would be mean temperature for each season. I mutated the data to find the mean for each. 
 
 ```{r}
 phen2 <- phen2 %>% 
@@ -74,8 +73,9 @@ phen2 <- phen2 %>%
 Another column to create comes from changing `Mean_Daylength`, which is in seconds, to `daylength_sec`, and then dividing by 60 to get our new column, `daylength_min`.
 
 ```{r}
-phen2 <- rename(phen2, daylength_sec = Mean_Daylength)
-phen2 <- mutate(phen2, daylength_min = daylength_sec/60)
+phen2 <- phen2 %>%
+  rename(daylength_sec = Mean_Daylength) %>%
+  mutate(daylength_min = daylength_sec/60)
 ```
 
 Time to check for missing values, and in this case, remove them. Sometimes missing values are useful and the fact that a value is missing denotes something else about the data. In this case, a missing value could mean that there is an observation present in the row, but not about contained in the variables I'm working with. Thus, I removed the missing data. The values were reading as `-9999` so to start I changed them to read as `NA` and then used the `na.omit` function.
