@@ -232,6 +232,7 @@ p7s <- leaf_bud %>%
         axis.ticks.y = element_blank())
 p7s
 ```
+![p7s]({{site.url}}/assets/img/p7s.png)
 
 The two main takeaways that this plot communicates is the gradual decrease of mean bud break date (date getting earlier over time) and the emergence of a slight bi-modal distribution in some of the earlier years. Both of these are likely related to the temperature warming earlier in the year, leading the plant to believe spring is here when it may still be a month or two off.
 
@@ -267,6 +268,7 @@ p7a <- ggplot(by_species, aes(Genus, Mean_DOY)) +
   my.theme
 p7a
 ```
+![p7a]({{site.url}}/assets/img/p7a.png)
 
 In the next plot, I added a regression line to the year/date of first bud break plot. While the mean first date of bud break appears to decrease year by year, the `R-squared` value is  low. The linear model does not predict the date of first bud break with much accuracy. Let's see what other abiotic factors may be highly correlated with date of first bud break. 
 
@@ -280,6 +282,7 @@ p8b <- ggplot(leaf_bud, aes(Year, DOY)) +
   my.theme
 p8b
 ```
+![p8b]({{site.url}}/assets/img/p8b.png)
 
 ***
 
@@ -318,6 +321,7 @@ p12
 
 grid.arrange(p9, p10, p11, p12, nrow = 2)
 ```
+![plotgrid]({{site.url}}/assets/img/plotgrid.png)
 
 As an aside, I did some preliminary experimenting with the `ggplotly` package - what fun! Hover above any point in the plot above to gain more insights. More to come on that in another project. 
 
