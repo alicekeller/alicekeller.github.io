@@ -1,3 +1,3 @@
-Working on building [my website.](https://alicekeller.github.io/)
+[My website!](https://alicekeller.github.io/)
 
-Stay tuned!
+Always something in the works. Check back for new content!
