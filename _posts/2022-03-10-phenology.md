@@ -359,11 +359,11 @@ lm.doy.temp <- lm(DOY ~ Tavg_Spring, data = leaf_bud)
 summary(lm.doy.temp)
 ```
 
-The model with the best fit is the one we could have guessed, daylength. This model gives an R-squared value of 0.9826. Obviously this factor has the most influence on when leaves break their buds. Beyond that, mean accumulated precipitation has the next largest influence (`R-squared = 0.58`). The factor with the next highest correlation, `Tavg_Spring`, did not have a good model fit (`R-squared = 0.078`) so does not seem to be a reliable predictor of date of first bud break.
+The model with the best fit is the one we could have guessed, daylength. This model gives an R-squared value of `0.9826`. Obviously this factor has the most influence on when leaves break their buds. Beyond that, mean accumulated precipitation has the next largest influence (`R-squared = 0.58`). The factor with the next highest correlation, `Tavg_Spring`, did not have a good model fit (`R-squared = 0.078`) so does not seem to be a reliable predictor of date of first bud break.
 
 ***
 
 ## Takeaways
 It seems that the spring bud break date for plants in Colorado is getting earlier over the course of the past 10 years. While this dataset is not very large, nor is the time frame very long, this is an intriguing speculation. Additionally, the largest predictor of when leaves break their buds is daylight length. This was proved multiple times by the data above. After that, we can look to mean annual accumulated precipiation as an indicator - the more moisture plants get, the earlier they break their buds.
 
-What will a gradual earlier bud break date mean for the birds, insects, and other animals that rely on these plants?
+What will a gradual earlier bud break date mean for the birds, insects, and other animals that rely on these plants and the timing of their fruits and leaves? While I don't know the answer now, this is a topic to keep a close eye on in the coming years! The science community may be able to anticipate these changes within ecosystems and start to prepare for them.
