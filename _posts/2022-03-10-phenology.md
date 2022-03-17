@@ -368,4 +368,4 @@ It seems that the spring bud break date for plants in Colorado is getting earlie
 
 What will a gradual earlier bud break date mean for the birds, insects, and other animals that rely on these plants and the timing of their fruits and leaves? While I don't know the answer now, this is a topic to keep a close eye on in the coming years! The science community may be able to anticipate these changes within ecosystems and start to prepare for them.
 
-Full code for this project can be found on my [my Github.](https://github.com/alicekeller/CO-phenology)
+Full code for this project can be found on [my Github.](https://github.com/alicekeller/CO-phenology)
