@@ -11,6 +11,7 @@ author: Ali Keller
 
 navbar-links:
   About Me: "aboutme"
+  Tidy Tuesday: "tidytuesday"
  # Resources:
  #   - Beautiful Jekyll: "https://beautifuljekyll.com"
  #   - Learn markdown: "https://www.markdowntutorial.com/"
