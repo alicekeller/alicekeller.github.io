@@ -17,7 +17,7 @@ Follow along below as I explore the data and predict speed from various factors 
 <details><summary>Click for R code!</summary>
 <p>
   
-
+```
   library(tidyverse)
   library(tidytuesdayR)
   library(tidymodels)
@@ -29,7 +29,7 @@ Follow along below as I explore the data and predict speed from various factors 
 
   glimpse(ultra_rankings)
   glimpse(race)
-
+```
         
 </p>
 </details>
