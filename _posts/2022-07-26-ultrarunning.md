@@ -3,6 +3,7 @@ title: "Ultrarunning"
 subtitle: "Diving into speed and gender differences in ultramarathon races"
 ---
 
+{::options parse_block_html="true" /}
 
 This project stems from my love of running! While I've never done an ultramarathon, I'm fascinated with the reasons that would drive somebody to run that far (50+ miles). 
 
