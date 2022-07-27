@@ -17,7 +17,7 @@ Follow along below as I explore the data and predict speed from various factors 
 <details><summary>Click for R code!</summary>
 <p>
   
-```{r}
+```r
 library(tidyverse)
 library(tidytuesdayR)
 library(tidymodels)
@@ -34,17 +34,4 @@ glimpse(race)
 </p>
 </details>
   
-  
-## collapsible markdown?
 
-<details><summary>CLICK ME</summary>
-<p>
-
-#### yes, even hidden code blocks!
-
-```python
-print("hello world!")
-```
-
-</p>
-</details>
