@@ -1,6 +1,6 @@
 ---
 title: "Ultrarunning"
-author: "Ali Keller"
+subtitle: "Diving into speed and gender differences in ultramarathon races"
 ---
 
 
