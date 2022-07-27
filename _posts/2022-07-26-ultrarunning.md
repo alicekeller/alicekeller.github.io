@@ -14,6 +14,9 @@ Follow along below as I explore the data and predict speed from various factors 
 
 ### Data Cleaning and Exploratory Data Analysis
 
+<details><summary>Click for R code!</summary>
+<p>
+  
 ```{r}
   library(tidyverse)
   library(tidytuesdayR)
@@ -27,4 +30,7 @@ Follow along below as I explore the data and predict speed from various factors 
   glimpse(ultra_rankings)
   glimpse(race)
 ```
-
+        
+</p>
+</details>
+  
