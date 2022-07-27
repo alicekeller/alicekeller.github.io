@@ -17,19 +17,19 @@ Follow along below as I explore the data and predict speed from various factors 
 <details><summary>Click for R code!</summary>
 <p>
   
-```r
-library(tidyverse)
-library(tidytuesdayR)
-library(tidymodels)
 
-#load data
-tuesdata <- tidytuesdayR::tt_load(2021, week = 44)
-ultra_rankings <- tuesdata$ultra_rankings
-race <- tuesdata$race
+  library(tidyverse)
+  library(tidytuesdayR)
+  library(tidymodels)
 
-glimpse(ultra_rankings)
-glimpse(race)
-```
+  #load data
+  tuesdata <- tidytuesdayR::tt_load(2021, week = 44)
+  ultra_rankings <- tuesdata$ultra_rankings
+  race <- tuesdata$race
+
+  glimpse(ultra_rankings)
+  glimpse(race)
+
         
 </p>
 </details>
