@@ -1,7 +1,6 @@
 ---
 title: "Ultrarunning"
 author: "Ali Keller"
-date: '2022-06-06'
 ---
 
 
