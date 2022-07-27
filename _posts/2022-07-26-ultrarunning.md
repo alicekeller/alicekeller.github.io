@@ -14,8 +14,8 @@ Follow along below as I explore the data and predict speed from various factors 
 
 ### Data Cleaning and Exploratory Data Analysis
 
-<details>
-  <summary>Click to expand!</summary>
+<details><summary>Click for R code!</summary>
+<p>
   
 ```{r}
 library(tidyverse)
@@ -30,6 +30,21 @@ race <- tuesdata$race
 glimpse(ultra_rankings)
 glimpse(race)
 ```
- </details>
+        
+</p>
+</details>
   
   
+## collapsible markdown?
+
+<details><summary>CLICK ME</summary>
+<p>
+
+#### yes, even hidden code blocks!
+
+```python
+print("hello world!")
+```
+
+</p>
+</details>
