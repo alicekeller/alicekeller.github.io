@@ -31,6 +31,6 @@ Follow along below as I explore the data and predict speed from various factors 
   glimpse(ultra_rankings)
   glimpse(race)
   ```
-          </details>
+ </details>
   
   
