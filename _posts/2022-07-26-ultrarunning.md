@@ -57,6 +57,8 @@ p1
         
 </details>
 
+![p1]({{site.url}}/assets/img/p1_ultra.png)
+
 There seems to be many 0's present in the data, which I eventually mutated to NA's because there really isn't any value in keeping them as zero.
 
 I also wanted to join the two datasets with race info on the variable `race_year_id`, which is essentially a unique identifier for each race. You'll see that I also changed a few of the variables to factors from numeric.
