@@ -17,7 +17,7 @@ Follow along below as I explore the data and predict speed from various factors 
   <summary>Click for R code!</summary>
 
   
-{% highlight ruby %}
+{% highlight r %}
   library(tidyverse)
   library(tidytuesdayR)
   library(tidymodels)
