@@ -366,7 +366,107 @@ joined %>%
 10 100 Mile Spa DE CREMER Fabian          3.81
 # … with 86,206 more rows
 ```
+     
+Visualized below is mean speed for men and women by age. It looks like the speed of men decreases with age faster and then spikes after 60, while women stay more consistent throughout their lives and actually outperform men from ages 25 - 65.
+     
+<details>
+  <summary></summary>
+
+{% highlight r %}
+p6 <- joined %>%
+  filter(mph < 10, AgeAtRace < 75) %>%
+  ggplot(aes(AgeAtRace, mph)) +
+  geom_smooth(aes(color = gender)) +
+  labs(title = "Mean speed by age and gender",
+       x = "Age (years)",
+       y = "Speed (mph)") +
+  theme_classic() +
+  my.theme
+p6
+{% endhighlight %}
   
+</details>
+  
+![p6]({{site.url}}/assets/img/p6_ultra.png)
+  
+I was curious at the ratio of men vs. women within finishers. Had it changed over the 10 years that this dataset includes? Let's take a look below and see.
+
+First I created another new dataframe with the percentage of men and women finishers by year. I then visualized this to see if the percents have changed significantly over time.
+  
+<details>
+  <summary></summary>
+
+{% highlight r %}
+gender_ratio <- joined %>%
+  group_by(Year, gender) %>%
+  summarise(count = n()) %>%
+  mutate(per = count/sum(count) * 100) %>%
+  mutate(per.round = round(per, 1)) %>%
+  ungroup()
+gender_ratio
+{% endhighlight %}
+  
+</details>  
+```{r}
+  # A tibble: 20 × 5
+    Year gender count   per per.round
+   <dbl> <fct>  <int> <dbl>     <dbl>
+ 1  2012 M       5037  85.9      85.9
+ 2  2012 W        830  14.1      14.1
+ 3  2013 M       7356  87.4      87.4
+ 4  2013 W       1060  12.6      12.6
+ 5  2014 M       8504  85.6      85.6
+ 6  2014 W       1428  14.4      14.4
+ 7  2015 M       8224  86.2      86.2
+ 8  2015 W       1315  13.8      13.8
+ 9  2016 M       8729  86.9      86.9
+10  2016 W       1313  13.1      13.1
+11  2017 M      10574  85.6      85.6
+12  2017 W       1775  14.4      14.4
+13  2018 M      13489  84.6      84.6
+14  2018 W       2449  15.4      15.4
+15  2019 M      14054  84.3      84.3
+16  2019 W       2617  15.7      15.7
+17  2020 M       4129  83.5      83.5
+18  2020 W        816  16.5      16.5
+19  2021 M       5859  86.4      86.4
+20  2021 W        920  13.6      13.6
+```
+
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#convert year to factor for plot
+gender_ratio <- gender_ratio %>%
+  mutate(Year = as.factor(Year))
+glimpse(gender_ratio)
+
+p7 <- gender_ratio %>% 
+  ggplot(aes(Year, per, fill = gender, label = per.round)) +
+  geom_col(aes(fill = gender)) +
+  coord_flip() +
+  geom_text(size = 3.5, position = position_stack(vjust = 0.3)) +
+  labs(title = "Gender percentage of race finishers by year",
+       y = "Percentage",
+       x = "Year") +
+  theme_classic() +
+  my.theme
+p7
+{% endhighlight %}
+  
+</details>  
+  
+![p7]({{site.url}}/assets/img/p7_ultra.png)
+  
+Looks like 2020 was the year with the highest percentage of women finishers.
+
+## Modeling the Data
+Now that I've explored the data a good amount, I'm the most curious about digging deeper into the factors (age, gender, course length, elevation gain) that determine speed. Since speed is a dependent variable and the various factors are independent variables, a regression analysis seems like the best option here. I'm going to train both a linear regression model and a random forest regression model to see which one fits the data better. All of this is done with the help of the amazing [tidymodels](https://www.tidymodels.org/) package!
+
+First, I want to create my modeling dataset that only contains the variables I want included in my model. Next I split the data by gender into a training and a test set. There is a large class imbalance within the gender variable, so I was sure to specify the proportion to split on so that one data set (training or testing) didn't end up with a larger proportion of men or women.
+
+```{r}
 > collect_metrics(lm_res)
 # A tibble: 2 × 6
   .metric .estimator  mean     n  std_err .config             
@@ -380,8 +480,9 @@ joined %>%
   <chr>   <chr>      <dbl> <int>    <dbl> <chr>               
 1 rmse    standard   0.180    25 0.000246 Preprocessor1_Model1
 2 rsq     standard   0.641    25 0.000696 Preprocessor1_Model1
+```
 
-    
+```{r}
 > metrics(results.b, truth = mph, estimate = .pred_lm)
 # A tibble: 3 × 3
   .metric .estimator .estimate
@@ -396,3 +497,4 @@ joined %>%
 1 rmse    standard       0.179
 2 rsq     standard       0.632
 3 mae     standard       0.138
+```
