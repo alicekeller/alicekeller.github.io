@@ -305,6 +305,67 @@ joined %>%
 10 JONES Chris        23
 # … with 58,392 more rows
 ```
+
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#runner speed, arranged descending
+joined %>%
+  group_by(runner) %>%
+  summarise(runner_speed = mean(mph)) %>%
+  filter(runner_speed < 10) %>%
+  arrange(desc(runner_speed))
+{% endhighlight %}
+  
+</details>
+
+```{r}
+# A tibble: 58,402 × 2
+   runner                runner_speed
+   <chr>                        <dbl>
+ 1 PICARD Romain                 8.27
+ 2 RAZET Vivien                  8.25
+ 3 BAHLA Sadek                   8.24
+ 4 PILLAT PIERRE ETIENNE         8.21
+ 5 PEGEOT Pierre Alain           8.17
+ 6 MATHIEU Damien                8.15
+ 7 LACROIX Olivier               8.14
+ 8 DOS SANTOS Matthieu           8.14
+ 9 VANETTEN Taggart              8.13
+10 GUILLOT Elise                 8.11
+# … with 58,392 more rows
+```
+
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#want to see runner speed per course
+joined %>%
+  group_by(event, runner) %>%
+  summarise(runner_speed = mean(mph))
+{% endhighlight %}
+  
+</details>
+
+```{r}
+# A tibble: 86,216 × 3
+# Groups:   event [372]
+   event        runner            runner_speed
+   <chr>        <chr>                    <dbl>
+ 1 #Småland100  BELCASTRO Luigi           3.64
+ 2 #Småland100  EKBLAD Jonathan           3.50
+ 3 #Småland100  FERNEMAR Thomas           3.73
+ 4 #Småland100  GUSTAVSSON Jimmy          3.64
+ 5 #Småland100  Jonsson Daniel            3.73
+ 6 #Småland100  STROEM Martin             4.43
+ 7 #Småland100  WILSON Torbjorn           4.43
+ 8 100 Mile Spa BREMMERS Paul             4.47
+ 9 100 Mile Spa CHEVALIER Michael         4.03
+10 100 Mile Spa DE CREMER Fabian          3.81
+# … with 86,206 more rows
+```
   
 > collect_metrics(lm_res)
 # A tibble: 2 × 6
