@@ -289,7 +289,8 @@ joined %>%
   
 </details>
   
-`# A tibble: 58,402 × 2
+```{r}
+# A tibble: 58,402 × 2
    runner              n
    <chr>           <int>
  1 FANCETT Kenneth    36
@@ -302,7 +303,8 @@ joined %>%
  8 THOMPSON Mark      24
  9 CARTER Williams    23
 10 JONES Chris        23
-# … with 58,392 more rows`
+# … with 58,392 more rows
+```
   
 > collect_metrics(lm_res)
 # A tibble: 2 × 6
