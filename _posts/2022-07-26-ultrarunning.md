@@ -107,6 +107,53 @@ joined <- joined %>%
   
 </details>
   
+Finally, I went back to my initial observation above and changed the zeros in the `age` and `distance` variables to have an NA value. This way I could simply omit NA's and get rid of those values without sacrificing losing too much data (only omitting about 17,000 rows from 137,000). 
+
+After that, you'll see me creating a new column called `AgeAtRace`, as the original dataset contained ages of participants now, not when they competed. Further explanation of this can be found in the original [Github Repo](https://github.com/BjnNowak/UltraTrailRunning/blob/main/cleaning_script.R) for this project.
+
+
+<details>
+  <summary></summary>
+
+{% highlight r %}
+joined$age <- na_if(joined$age, 0)
+joined$distance <- na_if(joined$distance, 0)
+colSums(is.na(joined))
+
+
+joined <- joined %>%
+  drop_na()
+colSums(is.na(joined))
+
+
+joined <- joined %>%
+  mutate(Year = lubridate::year(date)) %>%
+  mutate(AgeAtRace = age - (2021 - Year))
+{% endhighlight %}
+  
+</details>
+  
+
+Now that we have `AgeAtRace`, I wanted to take a look at the distribution of ages across all participants.
+  
+
+<details>
+  <summary></summary>
+
+{% highlight r %}
+p2 <- joined %>%
+  ggplot(aes(AgeAtRace)) +
+  geom_histogram(aes(fill = gender)) +
+  labs(title = "Frequency distribution of finisher ages", x = "Age",
+       y = "Number of finishers") +
+  theme_classic() +
+  my.theme
+p2
+{% endhighlight %}
+  
+</details>
+  
+![p2]({{site.url}}/assets/img/p2_ultra.png)
   
 > collect_metrics(lm_res)
 # A tibble: 2 × 6
