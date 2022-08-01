@@ -462,25 +462,84 @@ p7
 Looks like 2020 was the year with the highest percentage of women finishers.
 
 ## Modeling the Data
-Now that I've explored the data a good amount, I'm the most curious about digging deeper into the factors (age, gender, course length, elevation gain) that determine speed. Since speed is a dependent variable and the various factors are independent variables, a regression analysis seems like the best option here. I'm going to train both a linear regression model and a random forest regression model to see which one fits the data better. All of this is done with the help of the amazing [tidymodels](https://www.tidymodels.org/) package!
+Now that I've explored the data a good amount, I'm the most curious about digging deeper into how well certain factors (age, gender, course length, elevation gain) predict speed. Since speed is one dependent variable and the various factors are independent variables, a regression analysis seems like the best option here. I'm going to train both a linear regression model and a random forest regression model to see which one fits the data better. All of this is done with the help of the amazing [tidymodels](https://www.tidymodels.org/) package!
 
-First, I want to create my modeling dataset that only contains the variables I want included in my model. Next I split the data by gender into a training and a test set. There is a large class imbalance within the gender variable, so I was sure to specify the proportion to split on so that one data set (training or testing) didn't end up with a larger proportion of men or women.
+First, I created my modeling dataset that only contains the variables I want included in my model. Next I split the data by gender into a training and a testing set. There is a large class imbalance within the gender variable, so I was sure to specify the proportion to split on so that one data set (training or testing) didn't end up with a larger proportion of men or women.
+  
+<details>
+  <summary></summary>
 
-```{r}
-> collect_metrics(lm_res)
-# A tibble: 2 × 6
-  .metric .estimator  mean     n  std_err .config             
-  <chr>   <chr>      <dbl> <int>    <dbl> <chr>               
-1 rmse    standard   0.192    25 0.000175 Preprocessor1_Model1
-2 rsq     standard   0.544    25 0.000633 Preprocessor1_Model1
-    
-> collect_metrics(rf_res)
-# A tibble: 2 × 6
-  .metric .estimator  mean     n  std_err .config             
-  <chr>   <chr>      <dbl> <int>    <dbl> <chr>               
-1 rmse    standard   0.180    25 0.000246 Preprocessor1_Model1
-2 rsq     standard   0.641    25 0.000696 Preprocessor1_Model1
-```
+{% highlight r %}
+joined_mod <- joined %>%
+  select(mph, AgeAtRace, gender, distance_mi, elevation_gain)
+
+set.seed(123)
+race_split <- joined_mod %>%
+  initial_split(prop = 0.8,
+                strata = gender)
+
+race_train <- training(race_split)
+race_test <- testing(race_split)
+{% endhighlight %}
+  
+</details>  
+  
+After that, I specified my models, both linear and random forest.
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#linear regression model specification
+lm_mod <- linear_reg() %>%
+  set_engine("lm")
+
+#random forest model specification
+rf_mod <- rand_forest() %>% 
+  set_mode("regression") %>% 
+  set_engine("randomForest")
+{% endhighlight %}
+  
+</details>  
+  
+Then I'm going to fit a basic linear regression model and a random forest regression model to my training data. I'm first doing this without any resampling of my data, which I address a little later on. You'll notice I log transform the speed(mph) variable in both models as the distribution of the original variable is log normal.
+  
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#fitting linear regression and random forest models to data without bootstrapping
+fit_lm <- lm_mod %>% 
+  fit(log(mph) ~ .,
+      data = race_train)
+fit_lm
+
+fit_rf <- rf_mod %>%
+  fit(log(mph) ~ .,
+      data = race_train)
+fit_rf
+{% endhighlight %}
+  
+</details> 
+  
+Now that the models are fit on my training data, I wanted to evaluate their performance using my testing dataset that I created above.
+  
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#evaluating model performance on testing data without bootstraps
+results.b <- race_test %>% 
+  mutate(mph = log(mph)) %>% 
+  bind_cols(predict(fit_lm, race_test) %>% 
+              rename(.pred_lm = .pred)) %>% 
+  bind_cols(predict(fit_rf, race_test) %>% 
+              rename(.pred_rf = .pred))
+
+metrics(results.b, truth = mph, estimate = .pred_lm)
+metrics(results.b, truth = mph, estimate = .pred_rf)
+{% endhighlight %}
+  
+</details> 
 
 ```{r}
 > metrics(results.b, truth = mph, estimate = .pred_lm)
@@ -498,3 +557,57 @@ First, I want to create my modeling dataset that only contains the variables I w
 2 rsq     standard       0.632
 3 mae     standard       0.138
 ```
+From the metrics that are printed out, you'll see that the random forest model has slightly higher performance, particularly in the R-squared value of `0.632`. While this is not the most amazing value for our model to predict speed, it is significant and tells us that our data fit the model predictions relatively well.
+
+I was curious how the models would perform on a resampled dataset to better evaluate both models. I used the bootstrap method, which creates a larger simulated dataset by drawing with replacement from my original dataset and then fitting the model on that. The default for this with the `bootstraps()` function is 25 times, which was fine with me and took a significant amount of time to run on my random forest model!
+
+I first created my new resampled dataset, and then fit my models on that bootstrapped dataset.
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#create 25 bootstrap resamples
+race_boot <- bootstraps(race_train)
+
+#fitting lm and rf models to data with bootstrap resampling
+lm_res <- lm_mod %>% 
+  fit_resamples(
+    log(mph) ~ .,
+    resamples = race_boot,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+#random forest takes super long time to run
+rf_res <- rf_mod %>% 
+  fit_resamples(
+    log(mph) ~ .,
+    resamples = race_boot,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+glimpse(lm_res)
+  
+#evaluating performance with metrics
+collect_metrics(lm_res)
+collect_metrics(rf_res)
+{% endhighlight %}
+  
+</details> 
+
+```{r}
+> collect_metrics(lm_res)
+# A tibble: 2 × 6
+  .metric .estimator  mean     n  std_err .config             
+  <chr>   <chr>      <dbl> <int>    <dbl> <chr>               
+1 rmse    standard   0.192    25 0.000175 Preprocessor1_Model1
+2 rsq     standard   0.544    25 0.000633 Preprocessor1_Model1
+    
+> collect_metrics(rf_res)
+# A tibble: 2 × 6
+  .metric .estimator  mean     n  std_err .config             
+  <chr>   <chr>      <dbl> <int>    <dbl> <chr>               
+1 rmse    standard   0.180    25 0.000246 Preprocessor1_Model1
+2 rsq     standard   0.641    25 0.000696 Preprocessor1_Model1
+```
+I then collected the metrics created in new both resampled datasets to see how either one performed on the data. It looks like the random forest is again the better predictor, this time with a slightly higher R-squared value (than the linear regression) of `0.641`. This means that approximately 64% of the variance within the speed variable is explained by the predictor variables in the random forest model I specified.
+  
