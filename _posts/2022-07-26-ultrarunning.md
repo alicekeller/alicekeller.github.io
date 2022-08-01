@@ -232,7 +232,7 @@ p4
 
 ![p4]({{site.url}}/assets/img/p4_ultra.png)
   
-It seems like most speeds fall between 2 and 4 mph with a gradual right hand tail. Speed is the variable I'm hoping to be able to predict, but based on this logarithmic distribution I think I'll have to log transform the speed variable in order to create a reliable model with it.
+It seems like most speeds fall between 2 and 4 mph with a gradual right hand tail. Speed is the variable I'm hoping to be able to predict, but based on this lognormal distribution I think I'll have to log transform the speed variable in order to create a reliable model with it.
 
 Next I wanted to dig a little deeper into how speed varies by course. First I created a new data frame with average speed for each course, broken down by gender. I wanted to visualize this, so I changed the `event` variable into a factor.
   
