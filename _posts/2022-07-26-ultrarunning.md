@@ -610,4 +610,37 @@ collect_metrics(rf_res)
 2 rsq     standard   0.641    25 0.000696 Preprocessor1_Model1
 ```
 I then collected the metrics created in new both resampled datasets to see how either one performed on the data. It looks like the random forest is again the better predictor, this time with a slightly higher R-squared value (than the linear regression) of `0.641`. This means that approximately 64% of the variance within the speed variable is explained by the predictor variables in the random forest model I specified.
+    
+Then I plotted the results to visualize each model. The blue line shows the model prediction compared to the ideal grey dotted line. While it's a little hard to tell in the plot, the random forest model provides slightly better predictions than the linear model. This may because more of the points are clumped in a tighter area in the middle, which likely increases the R-squared. There is a larger spread and variance within the linear model.
+    
+<details>
+  <summary></summary>
+
+{% highlight r %}
+#evaluating fit for both models with bootstraps
+results2 <-  bind_rows(lm_res %>%
+                        collect_predictions() %>%
+                        mutate(model = "Linear model"),
+                      rf_res %>%
+                        collect_predictions() %>%
+                        mutate(model = "Random forest"))
+
+#plot the above results
+p8 <- results2 %>%
+  ggplot(aes(`log(mph)`, .pred)) +
+  geom_abline(lty = 2, color = "gray50") +
+  geom_point(aes(color = id), size = 1.5, alpha = 0.3, show.legend = FALSE) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ model) +
+  labs(title = "Comparison of bootstrapped models",
+       x = "Actual values",
+       y = "Predicted values") +
+  theme_classic() +
+  my.theme
+p8
+{% endhighlight %}
   
+</details> 
+  
+
+![p8]({{site.url}}/assets/img/p8_ultra.png)
