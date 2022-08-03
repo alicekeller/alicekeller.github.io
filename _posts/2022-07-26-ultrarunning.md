@@ -644,3 +644,7 @@ p8
   
 
 ![p8]({{site.url}}/assets/img/p8_ultra.png)
+  
+All in all, the predictor variables I thought would have the most influence on speed (age, gender, course length, elevation gain) explained about 64% ( within the random forest model) of the variance within the speed variable. This means that those variables do a pretty good job of predicting speed during an ultramarathon, but there are likely other factors that also contribute. These could be things like starting elevation, wind on race day, how somebody slept, what they ate, etc. And of course, speed isn't everything in these long races! These are tests of mental and physical endurance and oftentimes, speed is the last thing on most runner's minds. 
+
+Thanks for joining me into this exploration - next time you see somebody running, remember that there are many factors contributing to how fast they're going!
