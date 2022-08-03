@@ -1,6 +1,7 @@
 ---
 title: "Ultrarunning"
 subtitle: "Diving into speed and gender differences in ultramarathon races"
+cover-img: /assets/img/Running_pic.jpeg
 ---
 
 This project stems from my love of running! While I've never done an ultramarathon, I'm fascinated with the reasons that would drive somebody to run that far (50+ miles). 
