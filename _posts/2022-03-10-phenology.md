@@ -1,6 +1,7 @@
 ---
 title: "Colorado Phenology"
 subtitle: Investigating when leaf buds appear within plants across Colorado
+cover-img: /assets/img/leaf_bud.jpeg
 ---
 
 I began this project a while ago in hopes that it would be a quick, fun data investigation. Of course life got in the way, and now I'm finally pulling it out from the back burner and putting the finishing touches on it. It is by no means as polished or thorough as I would like it to be, but sometimes done is better than perfect. I've learned a lot about processing and analalyzing data in R since I began, so my code is an odd mix of current and not-so-current techniques. Hopefully there is a very small group of people that finds this interesting - on to more investigating!
